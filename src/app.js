@@ -29,8 +29,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static upload assets
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+// Serve static upload assets (dynamically resolve writeable path on Vercel)
+const staticUploadPath = process.env.VERCEL
+  ? path.join('/tmp', 'uploads')
+  : path.join(process.cwd(), 'uploads');
+app.use('/uploads', express.static(staticUploadPath));
 
 // Logging Middlewares
 if (process.env.NODE_ENV !== 'production') {

@@ -2,10 +2,18 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure uploads folder exists in working directory
-const uploadDir = path.join(process.cwd(), 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// On Vercel (Serverless), the only writeable directory is '/tmp'. Local workspace paths are read-only.
+const isVercel = process.env.VERCEL || process.env.NOW_BUILD_TRIGGER;
+const uploadDir = isVercel 
+  ? path.join('/tmp', 'uploads') 
+  : path.join(process.cwd(), 'uploads');
+
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn('Uploader: could not create directory:', err.message);
 }
 
 // Storage setup
