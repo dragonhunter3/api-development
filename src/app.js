@@ -35,9 +35,25 @@ const staticUploadPath = process.env.VERCEL
   : path.join(process.cwd(), 'uploads');
 app.use('/uploads', express.static(staticUploadPath));
 
-// Silence favicon requests to keep Vercel logs completely clean
-app.get('/favicon.ico', (req, res) => res.status(204).end());
-app.get('/favicon.png', (req, res) => res.status(204).end());
+// Serve a valid 16x16 orange dummy favicon directly from memory
+const dummyFavicon = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAADFJREFUOE9jZGBgYJjMIPwfSBgYGJgoMBlmAPpBhhl4wKgBowaMGjBqAIkwDDoAAG2zBgoTfVpGAAAAAElFTkSuQmCC',
+  'base64'
+);
+app.get('/favicon.ico', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'image/png',
+    'Content-Length': dummyFavicon.length
+  });
+  res.end(dummyFavicon);
+});
+app.get('/favicon.png', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'image/png',
+    'Content-Length': dummyFavicon.length
+  });
+  res.end(dummyFavicon);
+});
 
 // Logging Middlewares
 if (process.env.NODE_ENV !== 'production') {
