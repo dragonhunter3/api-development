@@ -37,12 +37,65 @@ const { protect } = require('../middlewares/authMiddleware');
  *         avatar:
  *           type: string
  *           description: The user's avatar image URL
+ *         company:
+ *           type: string
+ *           description: The user's employer or construction company
+ *         profession:
+ *           type: string
+ *           description: The user's professional role (e.g. Architect, Civil Engineer)
+ *         phone:
+ *           type: string
+ *           description: Contact phone number
+ *         city:
+ *           type: string
+ *           description: Home/work city
+ *         country:
+ *           type: string
+ *           description: Country of operation
+ *         subscriptionStatus:
+ *           type: string
+ *           enum: [free, premium]
+ *           description: The billing status of the user account
+ *         preferredUnits:
+ *           type: string
+ *           enum: [Metric, Imperial]
+ *           description: The user's configuration for measurements
+ *         preferredCurrency:
+ *           type: string
+ *           enum: [PKR, USD, AED]
+ *           description: The user's configuration for money and costs
+ *         projects:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of linked Project IDs
+ *         reports:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of linked Report IDs
+ *         calculations:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of linked Calculation IDs
  *       example:
  *         id: 60d21b4667d0d8992e610c85
  *         name: John Doe
  *         email: johndoe@example.com
  *         authProvider: email
  *         avatar: ""
+ *         company: BuildMate Construction
+ *         profession: Civil Engineer
+ *         phone: "+1234567890"
+ *         city: New York
+ *         country: USA
+ *         subscriptionStatus: free
+ *         preferredUnits: Metric
+ *         preferredCurrency: PKR
+ *         projects: []
+ *         reports: []
+ *         calculations: []
  *     AuthResponse:
  *       type: object
  *       properties:

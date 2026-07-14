@@ -93,3 +93,49 @@ Once deployed, Vercel will generate a public URL (e.g., `https://apis-developmen
   }
   ```
 - **Swagger Documentation**: Visit `https://apis-development-xxxxxx.vercel.app/api-docs` to access the interactive documentation and run live tests on your deployed APIs!
+
+---
+
+## Media Storage on Vercel (Production Uploads)
+
+Vercel functions are stateless and read-only. Files saved locally to the `/uploads` directory will be deleted shortly after upload when the serverless container recycles. 
+
+To enable persistent profile picture uploads in production:
+
+### Recommended: Cloudinary Integration
+1. Install Cloudinary and Multer-Storage-Cloudinary:
+   ```bash
+   npm install cloudinary multer-storage-cloudinary
+   ```
+2. Set up Cloudinary credentials in Vercel Environment Variables:
+   - `CLOUDINARY_CLOUD_NAME`
+   - `CLOUDINARY_API_KEY`
+   - `CLOUDINARY_API_SECRET`
+3. Modify `src/middlewares/uploadMiddleware.js` to upload directly to Cloudinary:
+   ```javascript
+   const cloudinary = require('cloudinary').v2;
+   const { CloudinaryStorage } = require('multer-storage-cloudinary');
+   const multer = require('multer');
+
+   cloudinary.config({
+     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+     api_key: process.env.CLOUDINARY_API_KEY,
+     api_secret: process.env.CLOUDINARY_API_SECRET
+   });
+
+   const storage = new CloudinaryStorage({
+     cloudinary: cloudinary,
+     params: {
+       folder: 'buildmate-avatars',
+       allowed_formats: ['jpg', 'jpeg', 'png']
+     }
+   });
+
+   const upload = multer({ storage: storage });
+   module.exports = upload;
+   ```
+4. Update `src/controllers/profileController.js` to use Cloudinary's URL:
+   ```javascript
+   // In Cloudinary, multer-storage-cloudinary stores the public URL directly in req.file.path (or req.file.secure_url)
+   const fileUrl = req.file.path || req.file.secure_url; 
+   ```

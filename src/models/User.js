@@ -37,6 +37,95 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    company: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    profession: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    phone: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    city: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    country: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    subscriptionStatus: {
+      type: String,
+      enum: ['free', 'premium'],
+      default: 'free',
+    },
+    preferredUnits: {
+      type: String,
+      enum: ['Metric', 'Imperial'],
+      default: 'Metric',
+    },
+    preferredCurrency: {
+      type: String,
+      enum: ['PKR', 'USD', 'AED'],
+      default: 'PKR',
+    },
+    projects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project',
+      },
+    ],
+    reports: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Report',
+      },
+    ],
+    calculations: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Calculation',
+      },
+    ],
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
+    resetPasswordOTP: {
+      type: String,
+      default: null,
+    },
+    resetPasswordOTPExpires: {
+      type: Date,
+      default: null,
+    },
+    pushResetSession: {
+      token: {
+        type: String,
+        default: null,
+      },
+      status: {
+        type: String,
+        enum: ['pending', 'approved'],
+        default: 'pending',
+      },
+      expiresAt: {
+        type: Date,
+        default: null,
+      },
+    },
   },
   {
     timestamps: true,

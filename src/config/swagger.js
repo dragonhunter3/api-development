@@ -15,15 +15,24 @@ const options = {
         description: 'Local Development Server',
       },
       {
-        url: 'https://your-app.vercel.app',
-        description: 'Production Vercel Server (Updated dynamically)',
+        url: 'http://myapplicationtest.chickenkiller.com',
+        description: 'Custom Domain Server (Port 80)',
+      },
+      {
+        url: 'http://myapplicationtest.chickenkiller.com:3000',
+        description: 'Custom Domain Server (Port 3000)',
+      },
+      {
+        url: 'https://api-development-sigma.vercel.app',
+        description: 'Production Vercel Server',
       },
     ],
   },
   // Search path for JSDoc annotations to generate Swagger Spec
   apis: [
-    path.join(process.cwd(), 'src/routes/*.js'),
-    path.join(__dirname, '../routes/*.js')
+    './src/routes/*.js',
+    './routes/*.js',
+    './api/routes/*.js'
   ],
 };
 

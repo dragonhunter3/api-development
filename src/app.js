@@ -2,10 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const connectDB = require('./config/db');
 const swaggerSpec = require('./config/swagger');
 const authRoutes = require('./routes/authRoutes');
+const forgotRoutes = require('./routes/forgotRoutes');
+const profileRoutes = require('./routes/profileRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 const { errorHandler } = require('./middlewares/errorMiddleware');
 
 // Initialize Express
@@ -23,6 +28,9 @@ app.use(cors());
 // Body Parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static upload assets
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Logging Middlewares
 if (process.env.NODE_ENV !== 'production') {
@@ -45,6 +53,10 @@ app.get('/', (req, res) => {
 
 // Authentication Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/auth/forgot', forgotRoutes);
+app.use('/api/v1/profile', profileRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
 
 // Centralized Error Handling Middleware
 app.use(errorHandler);
