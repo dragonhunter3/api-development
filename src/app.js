@@ -35,6 +35,10 @@ const staticUploadPath = process.env.VERCEL
   : path.join(process.cwd(), 'uploads');
 app.use('/uploads', express.static(staticUploadPath));
 
+// Silence favicon requests to keep Vercel logs completely clean
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.get('/favicon.png', (req, res) => res.status(204).end());
+
 // Logging Middlewares
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
