@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
+  const recipient = process.env.TEST_EMAIL_OVERRIDE || options.email;
+
   const isSmtpConfigured =
     process.env.SMTP_HOST &&
     process.env.SMTP_PORT &&
@@ -10,7 +12,10 @@ const sendEmail = async (options) => {
   if (!isSmtpConfigured) {
     console.log('\n==================================================');
     console.log('📬 [DEVELOPMENT MAIL FALLBACK - EMAIL NOT SENT]');
-    console.log(`To:      ${options.email}`);
+    console.log(`To:      ${recipient}`);
+    if (process.env.TEST_EMAIL_OVERRIDE) {
+      console.log(`(Overridden from: ${options.email})`);
+    }
     console.log(`Subject: ${options.subject}`);
     console.log('--------------------------------------------------');
     console.log(options.message);
@@ -31,7 +36,7 @@ const sendEmail = async (options) => {
   // Prepare message
   const message = {
     from: `${process.env.FROM_EMAIL || 'noreply@example.com'}`,
-    to: options.email,
+    to: recipient,
     subject: options.subject,
     text: options.message,
     html: options.html,
